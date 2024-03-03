@@ -169,7 +169,7 @@ void ESP32BLEPinpadComponent::loop() {
 
       if (this->service_->is_created() && this->should_start_ && this->setup_complete_) {
         if (this->service_->is_running()) {
-          esp32_ble::global_ble->restart_advertising_();
+          esp32_ble::global_ble->advertising_start();
 
           this->set_state_(STATE_IDLE);
           this->should_start_ = false;
