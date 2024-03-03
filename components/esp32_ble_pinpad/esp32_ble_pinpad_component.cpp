@@ -130,13 +130,13 @@ std::string ESP32BLEPinpadComponent::get_userid() {
     return std::string();
   }
 
-  ESP_LOGD(TAG, "Processing user message - %s", format_hex_pretty(this->tmp).c_str());
+  ESP_LOGD(TAG, "Processing user message - %s", format_hex_pretty(tmp).c_str());
   if (data_len > INPUT_MAX_LEN) {
     ESP_LOGV(TAG, "Too much data came in, or malformed resetting buffer...");
     return std::string();
   } else {
     ESP_LOGV(TAG, "Processing user id!");
-    return std::string(this->tmp.begin(), this->tmp.end());
+    return std::string(tmp.begin(), tmp.end());
   }
 }
 
@@ -147,13 +147,13 @@ std::string ESP32BLEPinpadComponent::get_cmd() {
     return std::string();
   }
 
-  ESP_LOGD(TAG, "Processing cmd message - %s", format_hex_pretty(this->tmp).c_str());
+  ESP_LOGD(TAG, "Processing cmd message - %s", format_hex_pretty(tmp).c_str());
   if (data_len > INPUT_MAX_LEN) {
     ESP_LOGV(TAG, "Too much data came in, or malformed resetting buffer...");
     return std::string();
   } else {
     ESP_LOGV(TAG, "Processing cmd!");
-    return std::string(this->tmp.begin(), this->tmp.end());
+    return std::string(tmp.begin(), tmp.end());
   }
 }
 
