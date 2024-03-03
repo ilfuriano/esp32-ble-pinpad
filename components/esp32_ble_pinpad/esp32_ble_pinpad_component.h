@@ -81,6 +81,7 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   State state_{STATE_STOPPED};
 
   std::vector<uint8_t> incoming_data_;
+  std::vector<uint8_t> userid_data_;
 
   BLEService *service_;
   BLECharacteristic *status_;
