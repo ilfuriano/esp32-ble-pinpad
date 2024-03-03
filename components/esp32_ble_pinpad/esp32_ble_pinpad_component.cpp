@@ -124,8 +124,8 @@ uint32_t ESP32BLEPinpadComponent::increment_hotp_counter() {
 }
 
 std::string ESP32BLEPinpadComponent::get_userid() {
-    std::vector<uint8_t> tmp = this->user_id_characteristic_.get_value();
-    size_t data_len = this->tmp.size();
+  std::vector<uint8_t> tmp = this->user_id_characteristic_->get_value();
+  size_t data_len = tmp.size();
   if (data_len == 0) {
     return std::string();
   }
@@ -141,8 +141,8 @@ std::string ESP32BLEPinpadComponent::get_userid() {
 }
 
 std::string ESP32BLEPinpadComponent::get_cmd() {
-  std::vector<uint8_t> tmp = this->cmd_characteristic_.get_value();
-  size_t data_len = this->tmp.size();
+  std::vector<uint8_t> tmp = this->cmd_characteristic_->get_value();
+  size_t data_len = tmp.size();
   if (data_len == 0) {
     return std::string();
   }
