@@ -125,19 +125,18 @@ uint32_t ESP32BLEPinpadComponent::increment_hotp_counter() {
 }
 
 std::string ESP32BLEPinpadComponent::get_userid() {
-  std::vector<uint8_t> tmp = this->user_id_characteristic_->get_value();
-  size_t data_len = tmp.size();
+  size_t data_len = this->userid_data_.size();
   if (data_len == 0) {
     return std::string();
   }
 
-  ESP_LOGD(TAG, "Processing user message - %s", format_hex_pretty(tmp).c_str());
+  ESP_LOGD(TAG, "Processing user message - %s", format_hex_pretty(this->userid_data_).c_str());
   if (data_len > INPUT_MAX_LEN) {
     ESP_LOGV(TAG, "Too much data came in, or malformed resetting buffer...");
     return std::string();
   } else {
     ESP_LOGV(TAG, "Processing user id!");
-    return std::string(tmp.begin(), tmp.end());
+    return std::string(this->userid_data_.begin(), this->userid_data_.end());
   }
 }
 
