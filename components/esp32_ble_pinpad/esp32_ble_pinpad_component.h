@@ -26,6 +26,10 @@ static const char *const PINPAD_STATUS_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bf
 static const char *const PINPAD_RPC_COMMAND_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900002";
 static const char *const PINPAD_SECURITY_MODE_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900003";
 static const char *const PINPAD_HOTP_COUNTER_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900004";
+static const char *const PINPAD_USERID_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900005";
+static const char *const PINPAD_CMD_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900006";
+
+
 
 static const uint32_t VALIDATION_STATE_HOLD_MILLIS = 500;
 
@@ -62,6 +66,8 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   bool is_accepted() const { return this->state_ == STATE_PIN_ACCEPTED; }
   bool is_rejected() const { return this->state_ == STATE_PIN_REJECTED; }
   void add_on_state_callback(std::function<void()> &&f) { this->state_callback_.add(std::move(f)); }
+  std::string get_userid();
+  std::string get_cdm();
 
   void set_status_indicator(output::BinaryOutput *status_indicator) { this->status_indicator_ = status_indicator; }
 
@@ -81,6 +87,8 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   BLECharacteristic *rpc_;
   BLECharacteristic *security_mode_characteristic_;
   BLECharacteristic *hotp_counter_characteristic_;
+  BLECharacteristic *user_id_characteristic_;
+  BLECharacteristic *cmd_characteristic_;
   CallbackManager<void()> state_callback_{};
 
   ESPPreferenceObject hotp_counter_;
