@@ -82,7 +82,7 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
 
   std::vector<uint8_t> incoming_data_;
   std::vector<uint8_t> userid_data_;
-  std::vector<uint8_t> userid_;
+  std::string userid_;
 
   BLEService *service_;
   BLECharacteristic *status_;

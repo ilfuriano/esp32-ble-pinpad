@@ -89,7 +89,7 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
     if (!data.empty()) {
       const char *tmp = (const char *) data.data();
       //this->userid_data_.insert(this->userid_data_.end(), data.begin(), data.end());
-      this->userid = std::string(tmp, tmp + data.size());
+      this->userid_ = std::string(tmp, tmp + data.size());
     }
   });
   BLEDescriptor *user_id_descriptor = new BLE2902();
