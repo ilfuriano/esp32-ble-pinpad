@@ -85,21 +85,18 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
    // UserId characteristic. Where we'll receive the userid.
   this->user_id_characteristic_ = this->service_->create_characteristic(PINPAD_USERID_CHR_UUID, BLECharacteristic::PROPERTY_WRITE);
   this->user_id_characteristic_->on_write([this](const std::vector<uint8_t> &data) {
-    ESP_LOGD(TAG, "Processing user message hex - %s", format_hex_pretty(data).c_str());
-    this->userid_ = std::string(data.begin(), data.end());
-    ESP_LOGD(TAG, "Processing user message string - %s", this->userid_.c_str());
-
+    this->user_id_ = std::string(data.begin(), data.end());
+    ESP_LOGD(TAG, "user: %s", this->user_id_.c_str());
   });
   BLEDescriptor *user_id_descriptor = new BLE2902();
   this->user_id_characteristic_->add_descriptor(user_id_descriptor);
 
   // Command characteristic. Where we'll receive the command.
   this->cmd_characteristic_ = this->service_->create_characteristic(PINPAD_CMD_CHR_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
-  //this->cmd_characteristic_->on_write([this](const std::vector<uint8_t> &data) {
-  //  if (!data.empty()) {
-      //this->incoming_data_.insert(this->incoming_data_.end(), data.begin(), data.end());
-  //  }
-  //});
+  this->cmd_characteristic_->on_write([this](const std::vector<uint8_t> &data) {
+    this->cmd_id_ = std::string(data.begin(), data.end());
+    ESP_LOGD(TAG, "command: %s", this->cmd_id_.c_str());
+  });
   BLEDescriptor *cmd_characteristic_descriptor = new BLE2902();
   this->cmd_characteristic_->add_descriptor(cmd_characteristic_descriptor);
 
@@ -123,27 +120,6 @@ uint32_t ESP32BLEPinpadComponent::increment_hotp_counter() {
   }
   ESP_LOGW(TAG, "Failed to save hotp counter");
   return nextVal - 1;
-}
-
-std::string ESP32BLEPinpadComponent::get_userid() {
-  return this->userid_;
-}
-
-std::string ESP32BLEPinpadComponent::get_cmd() {
-  std::vector<uint8_t> tmp = this->cmd_characteristic_->get_value();
-  size_t data_len = tmp.size();
-  if (data_len == 0) {
-    return std::string();
-  }
-
-  ESP_LOGD(TAG, "Processing cmd message - %s", format_hex_pretty(tmp).c_str());
-  if (data_len > INPUT_MAX_LEN) {
-    ESP_LOGV(TAG, "Too much data came in, or malformed resetting buffer...");
-    return std::string();
-  } else {
-    ESP_LOGV(TAG, "Processing cmd!");
-    return std::string(tmp.begin(), tmp.end());
-  }
 }
 
 void ESP32BLEPinpadComponent::loop() {

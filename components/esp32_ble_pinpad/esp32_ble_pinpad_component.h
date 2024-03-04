@@ -66,8 +66,8 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   bool is_accepted() const { return this->state_ == STATE_PIN_ACCEPTED; }
   bool is_rejected() const { return this->state_ == STATE_PIN_REJECTED; }
   void add_on_state_callback(std::function<void()> &&f) { this->state_callback_.add(std::move(f)); }
-  std::string get_userid();
-  std::string get_cmd();
+  std::string get_userid() const { return this->user_id_ };
+  std::string get_cmd() const { return this->cmd_id_ };
 
   void set_status_indicator(output::BinaryOutput *status_indicator) { this->status_indicator_ = status_indicator; }
 
@@ -80,9 +80,8 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
 
   State state_{STATE_STOPPED};
 
-  std::vector<uint8_t> incoming_data_;
-  std::vector<uint8_t> userid_data_;
-  std::string userid_;
+  std::string user_id_;
+  std::string cmd_id_;
 
   BLEService *service_;
   BLECharacteristic *status_;
