@@ -159,12 +159,14 @@ void ESP32BLEPinpadComponent::loop() {
       }
       if (now - this->current_state_start_ > VALIDATION_STATE_HOLD_MILLIS) {
         this->set_state_(STATE_IDLE);
+        this->clear_data();
       }
       break;
     }
     case STATE_PIN_REJECTED: {
       if (now - this->current_state_start_ > VALIDATION_STATE_HOLD_MILLIS) {
         this->set_state_(STATE_IDLE);
+        this->clear_data();
       }
       break;
     }
@@ -288,8 +290,14 @@ void ESP32BLEPinpadComponent::validate_pin_(std::string pin) {
 
 void ESP32BLEPinpadComponent::on_client_disconnect() { 
   this->incoming_data_.clear();
+  this->clear_data();
   this->set_state_(STATE_IDLE);
 };
+
+void ESP32BLEPinpadComponent::clear_data() {
+  this->user_id_ = {};
+  this->cmd_id_ = {};
+}
 
 }  // namespace esp32_ble_pinpad
 }  // namespace esphome

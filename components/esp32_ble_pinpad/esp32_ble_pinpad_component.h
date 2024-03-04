@@ -107,6 +107,7 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   void set_state_(State state);
   void process_incoming_data_();
   void validate_pin_(std::string pin);
+  void clear_data();
 };
 
 }  // namespace esp32_ble_pinpad
