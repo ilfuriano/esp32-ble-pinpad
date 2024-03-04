@@ -87,7 +87,7 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
   this->user_id_characteristic_->on_write([this](const std::vector<uint8_t> &data) {
     ESP_LOGD(TAG, "Processing user message hex - %s", format_hex_pretty(data).c_str());
     this->userid_ = std::string(data.begin(), data.end());
-    ESP_LOGD(TAG, "Processing user message string - %s", this->userid_);
+    ESP_LOGD(TAG, "Processing user message string - %s", this->userid_.c_str());
 
   });
   BLEDescriptor *user_id_descriptor = new BLE2902();
