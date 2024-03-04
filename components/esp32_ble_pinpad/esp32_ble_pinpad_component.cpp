@@ -297,8 +297,8 @@ void ESP32BLEPinpadComponent::on_client_disconnect() {
 void ESP32BLEPinpadComponent::clear_data() {
   this->user_id_ = {};
   this->cmd_id_ = {};
-  this->user_id_characteristic_->set_value({});
-  this->cmd_characteristic_->set_value({});
+  this->user_id_characteristic_->set_value("");
+  this->cmd_characteristic_->set_value("");
 }
 
 }  // namespace esp32_ble_pinpad
