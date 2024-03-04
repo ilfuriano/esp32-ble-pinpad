@@ -85,8 +85,11 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
    // UserId characteristic. Where we'll receive the userid.
   this->user_id_characteristic_ = this->service_->create_characteristic(PINPAD_USERID_CHR_UUID, BLECharacteristic::PROPERTY_WRITE);
   this->user_id_characteristic_->on_write([this](const std::vector<uint8_t> &data) {
+    this->userid_ = {};
     if (!data.empty()) {
-      this->userid_data_.insert(this->userid_data_.end(), data.begin(), data.end());
+      const char *tmp = (const char *) data.data();
+      //this->userid_data_.insert(this->userid_data_.end(), data.begin(), data.end());
+      this->userid = std::string(tmp, tmp + data.size());
     }
   });
   BLEDescriptor *user_id_descriptor = new BLE2902();
@@ -125,19 +128,7 @@ uint32_t ESP32BLEPinpadComponent::increment_hotp_counter() {
 }
 
 std::string ESP32BLEPinpadComponent::get_userid() {
-  size_t data_len = this->userid_data_.size();
-  if (data_len == 0) {
-    return std::string();
-  }
-
-  ESP_LOGD(TAG, "Processing user message - %s", format_hex_pretty(this->userid_data_).c_str());
-  if (data_len > INPUT_MAX_LEN) {
-    ESP_LOGV(TAG, "Too much data came in, or malformed resetting buffer...");
-    return std::string();
-  } else {
-    ESP_LOGV(TAG, "Processing user id!");
-    return std::string(this->userid_data_.begin(), this->userid_data_.end());
-  }
+  return this->userid_;
 }
 
 std::string ESP32BLEPinpadComponent::get_cmd() {
