@@ -92,7 +92,7 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
   this->user_id_characteristic_->add_descriptor(user_id_descriptor);
 
   // Command characteristic. Where we'll receive the command.
-  this->cmd_characteristic_ = this->service_->create_characteristic(PINPAD_CMD_CHR_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_WRITE);
+  this->cmd_characteristic_ = this->service_->create_characteristic(PINPAD_CMD_CHR_UUID, BLECharacteristic::PROPERTY_WRITE);
   this->cmd_characteristic_->on_write([this](const std::vector<uint8_t> &data) {
     this->cmd_id_ = std::string(data.begin(), data.end());
     ESP_LOGD(TAG, "command: %s", this->cmd_id_.c_str());
