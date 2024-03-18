@@ -103,7 +103,7 @@ async def to_code(config):
     
     for conf in config.get(CONF_ON_USER_SELECTED, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
-        await automation.build_automation(trigger, [], conf)
+        await automation.build_automation(trigger, [(cg.std_string, "user")], conf)
 
     if CONF_STATUS_INDICATOR in config:
         status_indicator = await cg.get_variable(config[CONF_STATUS_INDICATOR])
