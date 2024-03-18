@@ -103,7 +103,7 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
 
   // User commands characteristic. Tell to client the commands enabled for user
   this->user_cmd_characteristic_ = this->service_->create_characteristic(
-      PINPAD_USER_CMD_CHR_UUID, BLECharacteristic::PROPERTY_READ);
+      PINPAD_USER_CMD_CHR_UUID, BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
   BLEDescriptor *user_cmd_descriptor = new BLE2902();
   this->user_cmd_characteristic_->add_descriptor(user_cmd_descriptor);
 
@@ -312,6 +312,7 @@ void ESP32BLEPinpadComponent::clear_data() {
 
 void ESP32BLEPinpadComponent::set_user_commands(const std::string &commands) {
   this->user_cmd_characteristic_->set_value(commands);
+  this->user_cmd_characteristic_->notify();
   ESP_LOGD(TAG, "Commands sended %s", commands.c_str());
 
 } 
