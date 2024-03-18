@@ -312,6 +312,8 @@ void ESP32BLEPinpadComponent::clear_data() {
 
 void ESP32BLEPinpadComponent::set_user_commands(const std::string &commands) {
   this->user_cmd_characteristic_->set_value(commands);
+  ESP_LOGD(TAG, "Commands sended %s", commands.c_str());
+
 } 
 
 }  // namespace esp32_ble_pinpad
