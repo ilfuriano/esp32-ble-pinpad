@@ -12,7 +12,7 @@ class PinpadAcceptedTrigger : public Trigger<std::string, std::string> {
   PinpadAcceptedTrigger(ESP32BLEPinpadComponent *pinpad) {
     pinpad->add_on_state_callback([this, pinpad]() {
       if (pinpad->is_accepted()) {
-        this->trigger(this->user_id_, this->cmd_id_);
+        this->trigger(pinpad->user_id_, pinpad->cmd_id_);
       }
     });
   }
@@ -23,7 +23,7 @@ class PinpadRejectedTrigger : public Trigger<std::string, std::string> {
   PinpadRejectedTrigger(ESP32BLEPinpadComponent *pinpad) {
     pinpad->add_on_state_callback([this, pinpad]() {
       if (pinpad->is_rejected()) {
-        this->trigger(this->user_id_, this->cmd_id_);
+        this->trigger(pinpad->user_id_, pinpad->cmd_id_);
       }
     });
   }
