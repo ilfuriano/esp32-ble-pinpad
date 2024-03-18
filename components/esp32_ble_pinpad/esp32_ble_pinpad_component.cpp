@@ -86,7 +86,7 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
   this->user_id_characteristic_ = this->service_->create_characteristic(PINPAD_USERID_CHR_UUID, BLECharacteristic::PROPERTY_WRITE);
   this->user_id_characteristic_->on_write([this](const std::vector<uint8_t> &data) {
     this->user_id_ = std::string(data.begin(), data.end());
-    this->user_selected_callback_.call(user_id);
+    this->user_selected_callback_.call(this->user_id_);
     ESP_LOGD(TAG, "user: %s", this->user_id_.c_str());
   });
   BLEDescriptor *user_id_descriptor = new BLE2902();
@@ -310,7 +310,7 @@ void ESP32BLEPinpadComponent::clear_data() {
 
 }
 
-void ESP32BLEPinpadComponent::set_user_commands(cont std::string &commands) {
+void ESP32BLEPinpadComponent::set_user_commands(const std::string &commands) {
   this->user_cmd_characteristic_->set_value(commands);
 } 
 
