@@ -72,7 +72,8 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   void add_on_user_selected_callback(std::function<void(std::string)> callback) {
     this->user_selected_callback_.add(std::move(callback));
   }
-  
+  std::string get_userid() const { return this->user_id_; };
+  std::string get_cmd() const { return this->cmd_id_; };
 
   void set_status_indicator(output::BinaryOutput *status_indicator) { this->status_indicator_ = status_indicator; }
   void set_user_commands(const std::string &commands);
