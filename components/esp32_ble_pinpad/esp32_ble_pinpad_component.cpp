@@ -86,6 +86,7 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
   this->user_id_characteristic_ = this->service_->create_characteristic(PINPAD_USERID_CHR_UUID, BLECharacteristic::PROPERTY_WRITE);
   this->user_id_characteristic_->on_write([this](const std::vector<uint8_t> &data) {
     this->user_id_ = std::string(data.begin(), data.end());
+    this->user_selected_callback_.call(user_id);
     ESP_LOGD(TAG, "user: %s", this->user_id_.c_str());
   });
   BLEDescriptor *user_id_descriptor = new BLE2902();
@@ -99,6 +100,12 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
   });
   BLEDescriptor *cmd_characteristic_descriptor = new BLE2902();
   this->cmd_characteristic_->add_descriptor(cmd_characteristic_descriptor);
+
+  // User commands characteristic. Tell to client the commands enabled for user
+  this->user_cmd_characteristic_ = this->service_->create_characteristic(
+      PINPAD_USER_CMD_CHR_UUID, BLECharacteristic::PROPERTY_READ);
+  BLEDescriptor *user_cmd_descriptor = new BLE2902();
+  this->user_cmd_characteristic_->add_descriptor(user_cmd_descriptor);
 
   this->setup_complete_ = true;
 }
@@ -299,7 +306,13 @@ void ESP32BLEPinpadComponent::clear_data() {
   this->cmd_id_ = {};
   this->user_id_characteristic_->set_value("");
   this->cmd_characteristic_->set_value("");
+  this->user_cmd_characteristic_->set_value("");
+
 }
+
+void ESP32BLEPinpadComponent::set_user_commands(cont std::string &commands) {
+  this->user_cmd_characteristic_->set_value(commands);
+} 
 
 }  // namespace esp32_ble_pinpad
 }  // namespace esphome

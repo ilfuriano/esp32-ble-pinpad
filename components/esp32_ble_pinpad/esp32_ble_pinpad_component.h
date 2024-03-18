@@ -28,6 +28,8 @@ static const char *const PINPAD_SECURITY_MODE_CHR_UUID = "0003cc02-25ce-4e26-a32
 static const char *const PINPAD_HOTP_COUNTER_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900004";
 static const char *const PINPAD_USERID_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900005";
 static const char *const PINPAD_CMD_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900006";
+static const char *const PINPAD_USER_CMD_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900007";
+
 
 
 
@@ -59,6 +61,7 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   void start() override;
   void stop() override;
 
+
   // Setup code.
   void set_security_mode(SecurityMode mode, const std::string &secret_passcode);
 
@@ -66,10 +69,14 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   bool is_accepted() const { return this->state_ == STATE_PIN_ACCEPTED; }
   bool is_rejected() const { return this->state_ == STATE_PIN_REJECTED; }
   void add_on_state_callback(std::function<void()> &&f) { this->state_callback_.add(std::move(f)); }
+  void add_on_user_selected_callback(std::function<void(std::string)> callback) {
+    this->user_selected_callback_.add(std::move(callback));
   std::string get_userid() const { return this->user_id_; };
   std::string get_cmd() const { return this->cmd_id_; };
 
   void set_status_indicator(output::BinaryOutput *status_indicator) { this->status_indicator_ = status_indicator; }
+  void set_user_commands(const std::string &commands);
+
 
  protected:
   bool should_start_{false};
@@ -92,7 +99,11 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   BLECharacteristic *hotp_counter_characteristic_;
   BLECharacteristic *user_id_characteristic_;
   BLECharacteristic *cmd_characteristic_;
+  BLECharacteristic *user_cmd_characteristic_;
+
   CallbackManager<void()> state_callback_{};
+  CallbackManager<void(std::string)> user_selected_callback_;
+
 
   ESPPreferenceObject hotp_counter_;
 
@@ -108,6 +119,7 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
   void process_incoming_data_();
   void validate_pin_(std::string pin);
   void clear_data();
+
 };
 
 }  // namespace esp32_ble_pinpad

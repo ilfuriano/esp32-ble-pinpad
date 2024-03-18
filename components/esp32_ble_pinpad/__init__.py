@@ -16,6 +16,8 @@ CONF_SECURITY_MODE = "security_mode"
 CONF_SECRET_PASSCODE = "secret_passcode"
 CONF_ON_PINPAD_ACCEPTED = "on_pinpad_accepted"
 CONF_ON_PINPAD_REJECTED = "on_pinpad_rejected"
+CONF_ON_USER_SELECTED = "on_user_selected"
+
 
 SECURITY_MODE_NONE = "none"
 SECURITY_MODE_HOTP = "hotp"
@@ -67,6 +69,11 @@ CONFIG_SCHEMA = cv.Schema(
                 cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(PinpadRejectedTrigger),
             }
         ),
+        cv.Optional(CONF_ON_USER_SELECTED): automation.validate_automation(
+            {
+                cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(PinpadUserSelectedTrigger),
+            }
+        ),
         cv.Optional(CONF_STATUS_INDICATOR): cv.use_id(output.BinaryOutput),
     }
 ).extend(cv.COMPONENT_SCHEMA)
@@ -89,6 +96,10 @@ async def to_code(config):
         await automation.build_automation(trigger, [], conf)
 
     for conf in config.get(CONF_ON_PINPAD_REJECTED, []):
+        trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
+        await automation.build_automation(trigger, [], conf)
+    
+    for conf in config.get(CONF_ON_USER_SELECTED, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
         await automation.build_automation(trigger, [], conf)
 
