@@ -7,23 +7,23 @@
 namespace esphome {
 namespace esp32_ble_pinpad {
 
-class PinpadAcceptedTrigger : public Trigger<> {
+class PinpadAcceptedTrigger : public Trigger<std::string, std::string> {
  public:
   PinpadAcceptedTrigger(ESP32BLEPinpadComponent *pinpad) {
     pinpad->add_on_state_callback([this, pinpad]() {
       if (pinpad->is_accepted()) {
-        this->trigger();
+        this->trigger(this->user_id_, this->cmd_id_);
       }
     });
   }
 };
 
-class PinpadRejectedTrigger : public Trigger<> {
+class PinpadRejectedTrigger : public Trigger<std::string, std::string> {
  public:
   PinpadRejectedTrigger(ESP32BLEPinpadComponent *pinpad) {
     pinpad->add_on_state_callback([this, pinpad]() {
       if (pinpad->is_rejected()) {
-        this->trigger();
+        this->trigger(this->user_id_, this->cmd_id_);
       }
     });
   }

@@ -95,11 +95,11 @@ async def to_code(config):
 
     for conf in config.get(CONF_ON_PINPAD_ACCEPTED, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
-        await automation.build_automation(trigger, [], conf)
+        await automation.build_automation(trigger, [(cg.std_string, "user"), (cg.std_string, "cmd")], conf)
 
     for conf in config.get(CONF_ON_PINPAD_REJECTED, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
-        await automation.build_automation(trigger, [], conf)
+        await automation.build_automation(trigger, [(cg.std_string, "user"), (cg.std_string, "cmd")], conf)
     
     for conf in config.get(CONF_ON_USER_SELECTED, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
