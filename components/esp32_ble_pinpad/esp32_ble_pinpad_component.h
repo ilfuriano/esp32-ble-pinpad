@@ -21,14 +21,14 @@ static const char *const TAG = "esp32_ble_pinpad.component";
 
 static const size_t INPUT_MAX_LEN = 255;
 
-static const char *const PINPAD_SERVICE_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900000";
-static const char *const PINPAD_STATUS_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900001";
-static const char *const PINPAD_RPC_COMMAND_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900002";
-static const char *const PINPAD_SECURITY_MODE_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900003";
-static const char *const PINPAD_HOTP_COUNTER_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900004";
-static const char *const PINPAD_USERID_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900005";
-static const char *const PINPAD_CMD_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900006";
-static const char *const PINPAD_USER_CMD_CHR_UUID = "0003cc02-25ce-4e26-a32f-8c1bfa900007";
+static const char *const PINPAD_SERVICE_UUID = "909e937a-e826-11ee-bd3d-0242ac120000";
+static const char *const PINPAD_STATUS_CHR_UUID = "909e937a-e826-11ee-bd3d-0242ac120001";
+static const char *const PINPAD_RPC_COMMAND_CHR_UUID = "909e937a-e826-11ee-bd3d-0242ac120002";
+static const char *const PINPAD_SECURITY_MODE_CHR_UUID = "909e937a-e826-11ee-bd3d-0242ac120003";
+static const char *const PINPAD_HOTP_COUNTER_CHR_UUID = "909e937a-e826-11ee-bd3d-0242ac120004";
+static const char *const PINPAD_USERID_CHR_UUID = "909e937a-e826-11ee-bd3d-0242ac120005";
+static const char *const PINPAD_CMD_CHR_UUID = "909e937a-e826-11ee-bd3d-0242ac120006";
+static const char *const PINPAD_USER_CMD_CHR_UUID = "909e937a-e826-11ee-bd3d-0242ac120007";
 
 
 
