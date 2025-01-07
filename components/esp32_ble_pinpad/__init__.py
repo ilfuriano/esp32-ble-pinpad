@@ -16,6 +16,7 @@ CONF_SECURITY_MODE = "security_mode"
 CONF_SECRET_PASSCODE = "secret_passcode"
 CONF_ON_PINPAD_ACCEPTED = "on_pinpad_accepted"
 CONF_ON_PINPAD_REJECTED = "on_pinpad_rejected"
+CONF_ON_USER_COMMAND = "on_user_command_received"
 CONF_ON_USER_SELECTED = "on_user_selected"
 
 
@@ -53,7 +54,7 @@ validate_security_mode = cv.one_of(*SECURITY_MODES.keys(), lower=True)
 PinpadAcceptedTrigger = esp32_ble_pinpad_ns.class_("PinpadAcceptedTrigger", automation.Trigger.template())
 PinpadRejectedTrigger = esp32_ble_pinpad_ns.class_("PinpadRejectedTrigger", automation.Trigger.template())
 PinpadUserSelectedTrigger = esp32_ble_pinpad_ns.class_("PinpadUserSelectedTrigger", automation.Trigger.template())
-
+PinpadUserCommandTrigger = esp32_ble_pinpad_ns.class_("PinpadUserCommandTrigger", automation.Trigger.template())
 
 CONFIG_SCHEMA = cv.Schema(
     {
@@ -76,6 +77,11 @@ CONFIG_SCHEMA = cv.Schema(
                 cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(PinpadUserSelectedTrigger),
             }
         ),
+        cv.Optional(CONF_ON_USER_COMMAND): automation.validate_automation(
+            {
+                cv.GenerateID(CONF_TRIGGER_ID): cv.declare_id(PinpadUserCommandTrigger),
+            }
+        ),        
         cv.Optional(CONF_STATUS_INDICATOR): cv.use_id(output.BinaryOutput),
     }
 ).extend(cv.COMPONENT_SCHEMA)
@@ -104,6 +110,10 @@ async def to_code(config):
     for conf in config.get(CONF_ON_USER_SELECTED, []):
         trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
         await automation.build_automation(trigger, [(cg.std_string, "user")], conf)
+
+    for conf in config.get(CONF_ON_USER_COMMAND, []):
+        trigger = cg.new_Pvariable(conf[CONF_TRIGGER_ID], var)
+        await automation.build_automation(trigger, [(cg.std_string, "cmd")], conf)
 
     if CONF_STATUS_INDICATOR in config:
         status_indicator = await cg.get_variable(config[CONF_STATUS_INDICATOR])

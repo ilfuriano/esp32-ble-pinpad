@@ -96,6 +96,7 @@ void ESP32BLEPinpadComponent::setup_characteristics() {
   this->cmd_characteristic_ = this->service_->create_characteristic(PINPAD_CMD_CHR_UUID, BLECharacteristic::PROPERTY_WRITE);
   this->cmd_characteristic_->on_write([this](const std::vector<uint8_t> &data) {
     this->cmd_id_ = std::string(data.begin(), data.end());
+    this->user_command_callback_.call(this->cmd_id_);    
     ESP_LOGD(TAG, "command: %s", this->cmd_id_.c_str());
   });
   BLEDescriptor *cmd_characteristic_descriptor = new BLE2902();
