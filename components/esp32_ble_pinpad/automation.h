@@ -28,7 +28,14 @@ class PinpadRejectedTrigger : public Trigger<std::string, std::string> {
     });
   }
 };
-
+class PinpadUserCommandTrigger : public Trigger<std::string> {
+public:
+    PinpadUserCommandTrigger(ESP32BLEPinpadComponent *pinpad) {
+        pinpad->add_on_user_command_callback([this](const std::string &cmd) {
+            this->trigger(cmd);
+        });
+    }
+};
 class PinpadUserSelectedTrigger : public Trigger<std::string> {
  public:
   PinpadUserSelectedTrigger(ESP32BLEPinpadComponent *pinpad) {
