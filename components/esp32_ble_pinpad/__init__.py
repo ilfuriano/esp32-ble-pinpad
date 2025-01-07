@@ -18,8 +18,8 @@ CONF_ON_PINPAD_ACCEPTED = "on_pinpad_accepted"
 CONF_ON_PINPAD_REJECTED = "on_pinpad_rejected"
 CONF_ON_USER_COMMAND = "on_user_command_received"
 CONF_ON_USER_SELECTED = "on_user_selected"
-
-
+CONF_START_ADVERTISING = "start_advertising"
+CONF_STOP_ADVERTISING = "stop_advertising"
 SECURITY_MODE_NONE = "none"
 SECURITY_MODE_HOTP = "hotp"
 SECURITY_MODE_TOTP = "totp"
@@ -83,6 +83,8 @@ CONFIG_SCHEMA = cv.Schema(
             }
         ),        
         cv.Optional(CONF_STATUS_INDICATOR): cv.use_id(output.BinaryOutput),
+        cv.Optional(CONF_START_ADVERTISING, default=True): cv.boolean,  # Add this line
+        cv.Optional(CONF_STOP_ADVERTISING, default=False): cv.boolean,  # Add this line
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
@@ -118,3 +120,9 @@ async def to_code(config):
     if CONF_STATUS_INDICATOR in config:
         status_indicator = await cg.get_variable(config[CONF_STATUS_INDICATOR])
         cg.add(var.set_status_indicator(status_indicator))
+        
+    # Handle start/stop advertising configuration
+    if config[CONF_START_ADVERTISING]:
+        cg.add(var.start_advertising())
+    if config[CONF_STOP_ADVERTISING]:
+        cg.add(var.stop_advertising())
