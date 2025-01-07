@@ -224,6 +224,7 @@ void ESP32BLEPinpadComponent::start() {
 
 void ESP32BLEPinpadComponent::stop() {
   ESP_LOGD(TAG, "stop() called");
+  this->stop_advertising(); // Stop advertising
   this->set_timeout("end-service", 1000, [this] {
     this->service_->stop();
     this->set_state_(STATE_STOPPED);
@@ -317,7 +318,27 @@ void ESP32BLEPinpadComponent::set_user_commands(const std::string &commands) {
   ESP_LOGD(TAG, "Commands sended %s", commands.c_str());
 
 } 
+void ESP32BLEPinpadComponent::start_advertising() {
+    if (this->service_ && this->service_->is_running()) {
+        esp32_ble::global_ble->advertising_start();
+        ESP_LOGD(TAG, "BLE advertising started.");
+    } else {
+        ESP_LOGW(TAG, "Cannot start advertising: BLE service is not running.");
+    }
+}
 
+void ESP32BLEPinpadComponent::stop_advertising() {
+    if (this->service_ && this->service_->is_running()) {
+        esp32_ble::global_ble->advertising_stop();
+        ESP_LOGD(TAG, "BLE advertising stopped.");
+    } else {
+        ESP_LOGW(TAG, "Cannot stop advertising: BLE service is not running.");
+    }
+}
+
+esp32_ble_server::BLEServer *ESP32BLEPinpadComponent::get_ble_client() const {
+    return global_ble_server;
+}
 }  // namespace esp32_ble_pinpad
 }  // namespace esphome
 
