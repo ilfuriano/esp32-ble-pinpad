@@ -16,8 +16,9 @@ CONF_SECURITY_MODE = "security_mode"
 CONF_SECRET_PASSCODE = "secret_passcode"
 CONF_ON_PINPAD_ACCEPTED = "on_pinpad_accepted"
 CONF_ON_PINPAD_REJECTED = "on_pinpad_rejected"
+CONF_ON_USER_COMMAND = "on_user_command_received"
 CONF_ON_USER_SELECTED = "on_user_selected"
-CONF_ON_USER_COMMAND = "on_user_command"
+
 
 SECURITY_MODE_NONE = "none"
 SECURITY_MODE_HOTP = "hotp"
