@@ -59,8 +59,9 @@ class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
 
   float get_setup_priority() const override;
   void start() override;
-  void stop() override;
-
+ 
+  void stop() override; 
+ 
 
 
   // Setup code.
