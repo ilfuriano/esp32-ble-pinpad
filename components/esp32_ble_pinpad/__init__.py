@@ -55,6 +55,9 @@ PinpadAcceptedTrigger = esp32_ble_pinpad_ns.class_("PinpadAcceptedTrigger", auto
 PinpadRejectedTrigger = esp32_ble_pinpad_ns.class_("PinpadRejectedTrigger", automation.Trigger.template())
 PinpadUserSelectedTrigger = esp32_ble_pinpad_ns.class_("PinpadUserSelectedTrigger", automation.Trigger.template())
 PinpadUserCommandTrigger = esp32_ble_pinpad_ns.class_("PinpadUserCommandTrigger", automation.Trigger.template())
+# Define actions for start_advertising and stop_advertising
+StartAdvertisingAction = esp32_ble_pinpad_ns.class_("StartAdvertisingAction", automation.Action)
+StopAdvertisingAction = esp32_ble_pinpad_ns.class_("StopAdvertisingAction", automation.Action)
 
 CONFIG_SCHEMA = cv.Schema(
     {
@@ -88,6 +91,32 @@ CONFIG_SCHEMA = cv.Schema(
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
+@automation.register_action(
+    "esp32_ble_pinpad.start_advertising",
+    StartAdvertisingAction,
+    cv.Schema(
+        {
+            cv.GenerateID(): cv.use_id(ESP32BLEPinpadComponent),
+        }
+    ),
+)
+async def start_advertising_to_code(config, action_id, template_arg, args):
+    parent = await cg.get_variable(config[CONF_ID])
+    return cg.new_Pvariable(action_id, template_arg, parent)
+
+@automation.register_action(
+    "esp32_ble_pinpad.stop_advertising",
+    StopAdvertisingAction,
+    cv.Schema(
+        {
+            cv.GenerateID(): cv.use_id(ESP32BLEPinpadComponent),
+        }
+    ),
+)
+async def stop_advertising_to_code(config, action_id, template_arg, args):
+    parent = await cg.get_variable(config[CONF_ID])
+    return cg.new_Pvariable(action_id, template_arg, parent)
+    
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
@@ -121,8 +150,4 @@ async def to_code(config):
         status_indicator = await cg.get_variable(config[CONF_STATUS_INDICATOR])
         cg.add(var.set_status_indicator(status_indicator))
         
-    # Handle start/stop advertising configuration
-    if config[CONF_START_ADVERTISING]:
-        cg.add(var.start_advertising())
-    if config[CONF_STOP_ADVERTISING]:
-        cg.add(var.stop_advertising())
+ 
