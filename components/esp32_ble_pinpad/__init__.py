@@ -53,7 +53,7 @@ validate_security_mode = cv.one_of(*SECURITY_MODES.keys(), lower=True)
 PinpadAcceptedTrigger = esp32_ble_pinpad_ns.class_("PinpadAcceptedTrigger", automation.Trigger.template())
 PinpadRejectedTrigger = esp32_ble_pinpad_ns.class_("PinpadRejectedTrigger", automation.Trigger.template())
 PinpadUserSelectedTrigger = esp32_ble_pinpad_ns.class_("PinpadUserSelectedTrigger", automation.Trigger.template())
-
+PinpadUserCommandTrigger = esp32_ble_pinpad_ns.class_("PinpadUserCommandTrigger", automation.Trigger.template())
 
 CONFIG_SCHEMA = cv.Schema(
     {
