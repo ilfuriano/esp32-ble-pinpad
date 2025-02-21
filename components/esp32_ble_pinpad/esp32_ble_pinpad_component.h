@@ -48,7 +48,7 @@ enum SecurityMode : uint8_t {
   SECURITY_MODE_TOTP = 0x02,
 };
 
-class ESP32BLEPinpadComponent : public Component, public BLEServiceComponent {
+class ESP32BLEPinpadComponent : public Component, public BLEService {
  public:
   ESP32BLEPinpadComponent();
   void dump_config() override;
