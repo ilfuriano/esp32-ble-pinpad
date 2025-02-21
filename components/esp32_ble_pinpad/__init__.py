@@ -26,7 +26,7 @@ SECURITY_MODE_TOTP = "totp"
 
 esp32_ble_pinpad_ns = cg.esphome_ns.namespace("esp32_ble_pinpad")
 ESP32BLEPinpadComponent = esp32_ble_pinpad_ns.class_(
-    "ESP32BLEPinpadComponent", cg.Component, esp32_ble_server.BLEServiceComponent
+    "ESP32BLEPinpadComponent", cg.Component, esp32_ble_server.BLEService
 )
 
 SecurityMode = esp32_ble_pinpad_ns.enum("SecurityMode")
